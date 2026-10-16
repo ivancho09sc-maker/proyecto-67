@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Catálogo{% endblock %}
+{% block h1 %}Catálogo de Productos{% endblock %}
+{% block subtitle %}Gestión y organización de medicamentos{% endblock %}
+{% block content %}
+  <section class="card">
+    <h2>Productos Disponibles</h2>
+    <div class="grid">
+      {% for producto in productos %}
+      <div class="card-green">
+        <img src="{{ producto.imagen or 'https://placehold.co/300x180?text=Producto' }}" alt="{{ producto.nombre }}" loading="lazy">
+        <h3>{{ producto.nombre }}</h3>
+        <p>{{ producto.precio|cop }}</p>
+        {% if producto.stock == 0 %}<span class="badge badge-low">Agotado</span>{% endif %}
+      </div>
+      {% else %}
+      <p class="small-muted">No hay productos registrados.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

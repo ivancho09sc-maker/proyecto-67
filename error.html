@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Error {{ codigo }}{% endblock %}
+{% block h1 %}Error {{ codigo }}{% endblock %}
+{% block subtitle %}Algo no salió como esperábamos{% endblock %}
+{% block content %}
+<section class="card" style="text-align:center;">
+  <h2>{{ mensaje }}</h2>
+  <p><a class="btn" href="{{ url_for('index') }}">Volver al inicio</a></p>
+</section>
+{% endblock %}

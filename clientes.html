@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Clientes{% endblock %}
+{% block h1 %}Clientes{% endblock %}
+{% block subtitle %}Registro de los clientes de la droguería{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>Crear Cliente</h2>
+  <form method="post" action="{{ url_for('crear_cliente') }}">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" required minlength="2" maxlength="120" data-no-blank>
+      </div>
+      <div class="form-group">
+        <label for="documento">Documento</label>
+        <input type="text" id="documento" name="documento" required minlength="5" maxlength="20" pattern="[0-9A-Za-z\-]{5,20}" title="5 a 20 caracteres: letras, números o guion">
+      </div>
+      <div class="form-group">
+        <label for="telefono">Teléfono (opcional)</label>
+        <input type="tel" id="telefono" name="telefono" maxlength="20" pattern="[0-9+\s\-]{7,20}" title="Solo números, espacios, + o guion">
+      </div>
+      <div class="form-group">
+        <label for="email">Correo (opcional)</label>
+        <input type="email" id="email" name="email" maxlength="120">
+      </div>
+    </div>
+    <p class="centrado"><button class="btn" type="submit">Guardar cliente</button></p>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Listado de Clientes</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ID</th><th>Nombre</th><th>Documento</th><th>Teléfono</th><th>Correo</th><th>Acciones</th></tr></thead>
+      <tbody>
+      {% for c in clientes %}
+        <tr>
+          <td>{{ c.id }}</td>
+          <td>{{ c.nombre }}</td>
+          <td>{{ c.documento }}</td>
+          <td>{{ c.telefono or "-" }}</td>
+          <td>{{ c.email or "-" }}</td>
+          <td>
+            <a class="btn btn-warning" href="{{ url_for('editar_cliente', cliente_id=c.id) }}">Editar</a>
+            <form class="inline-form" method="post" action="{{ url_for('eliminar_cliente', cliente_id=c.id) }}" data-confirm="¿Seguro que deseas eliminar este cliente? Sus ventas se conservan sin cliente asignado.">
+              <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+              <button class="btn btn-danger" type="submit">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="6" class="small-muted">Aún no hay clientes.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

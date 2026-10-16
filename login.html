@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Iniciar sesión{% endblock %}
+{% block extra_head %}
+  <style>
+    .login-container{max-width:400px;margin:4rem auto;padding:2rem;background:#fff;border-radius:12px;box-shadow:0 4px 8px rgba(0,0,0,.2);text-align:center}
+    .login-container h2{margin-bottom:1rem;color:#2c7a7b}
+    .login-container input{width:90%;padding:.7rem;margin:.5rem 0;border:1px solid #ccc;border-radius:8px;font-size:1rem}
+    .login-container button{width:100%;padding:.8rem;background:#38b2ac;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:1rem;margin-top:1rem}
+    .login-container button:hover{background:#2c7a7b}
+  </style>
+{% endblock %}
+{% block header %}{% endblock %}
+{% block content %}
+  <div class="login-container">
+    <h2>Iniciar Sesión</h2>
+    <form method="post" action="{{ url_for('login') }}">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <input type="email" name="usuario" placeholder="Correo electrónico" required maxlength="120" autocomplete="username">
+      <input type="password" name="clave" placeholder="Contraseña" required autocomplete="current-password">
+      <button type="submit">Ingresar</button>
+      <div class="auth-links">
+        <a href="{{ url_for('registro') }}">¿No tienes cuenta? Regístrate</a><br>
+        <a href="{{ url_for('index') }}">Volver al inicio</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

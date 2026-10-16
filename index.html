@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+{% block subnav %}
+  <nav class="nav">
+    <a href="#resumen">Resumen</a>
+    <a href="#rotacion">Más vendidos</a>
+    <a href="#objetivos">Objetivos</a>
+    <a href="#mision">Misión</a>
+    <a href="#vision">Visión</a>
+    <a href="#dofa">DOFA</a>
+    <a href="#requisitos">Requisitos</a>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <section id="resumen" class="section">
+    <h2>Resumen</h2>
+    <p>
+      El proyecto propone el diseño, desarrollo e implementación de un sistema de información para la gestión de inventario en la droguería Elixir Urbano, con el fin de optimizar procesos internos, reducir errores, garantizar disponibilidad de medicamentos y mejorar la calidad del servicio.
+    </p>
+    <div class="stats">
+      <div class="stat"><span class="stat-num">{{ total_productos }}</span><span>Productos</span></div>
+      <div class="stat"><span class="stat-num">{{ total_clientes }}</span><span>Clientes</span></div>
+      <div class="stat"><span class="stat-num">{{ total_ventas }}</span><span>Ventas activas</span></div>
+      <div class="stat"><span class="stat-num">{{ ingresos|cop }}</span><span>Ingresos</span></div>
+      <div class="stat {% if bajo_stock %}stat-alerta{% endif %}"><span class="stat-num">{{ bajo_stock }}</span><span>Con stock bajo</span></div>
+      <div class="stat"><span class="stat-num">{{ total_usuarios }}</span><span>Usuarios</span></div>
+    </div>
+  </section>
+
+  <section id="rotacion" class="card">
+    <h2>Medicamentos de mayor rotación</h2>
+    {% if mas_vendidos %}
+      <ol>
+        {% for nombre, unidades in mas_vendidos %}
+          <li><strong>{{ nombre }}</strong> — {{ unidades }} unidades vendidas</li>
+        {% endfor %}
+      </ol>
+    {% else %}
+      <p class="small-muted">Aún no hay ventas registradas. Cuando se registren, aquí aparecerán los productos que más rotan.</p>
+    {% endif %}
+  </section>
+
+  <section id="objetivos" class="card">
+    <h2>Objetivos</h2>
+    <h3>General:</h3>
+    <p>Diseñar, desarrollar e implementar un sistema de información para la gestión y control del inventario.</p>
+    <h3>Específicos:</h3>
+    <ul>
+      <li>Identificar medicamentos de mayor rotación.</li>
+      <li>Analizar el flujo actual y puntos críticos.</li>
+      <li>Diseñar la arquitectura del sistema.</li>
+      <li>Elaborar cronograma y presupuesto.</li>
+      <li>Desarrollar módulos de usuarios, inventario y ventas.</li>
+      <li>Implementar controles de stock mínimo y alertas.</li>
+      <li>Capacitar al personal.</li>
+      <li>Realizar pruebas y recoger retroalimentación.</li>
+    </ul>
+  </section>
+
+  <section class="grid">
+    <div id="mision" class="card-green">
+      <h2>Misión</h2>
+      <p>Brindar a la comunidad un servicio eficiente y seguro en la distribución de medicamentos, optimizando la gestión de inventarios mediante un sistema moderno.</p>
+    </div>
+    <div id="vision" class="card-green">
+      <h2>Visión</h2>
+      <p>Convertirse en un referente local y regional en gestión eficiente de inventarios, consolidándose al 2030 como la droguería más innovadora tecnológicamente.</p>
+    </div>
+  </section>
+
+  <section id="dofa" class="card">
+    <h2>Matriz DOFA</h2>
+    <div class="grid">
+      <div>
+        <h3>Fortalezas</h3>
+        <ul>
+          <li>Variedad de productos</li>
+          <li>Ubicación estratégica</li>
+          <li>Personal capacitado</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Oportunidades</h3>
+        <ul>
+          <li>Crecimiento del mercado farmacéutico</li>
+          <li>Tendencia al control digital</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Debilidades</h3>
+        <ul>
+          <li>Procesos manuales</li>
+          <li>Riesgo de pérdida de medicamentos</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Amenazas</h3>
+        <ul>
+          <li>Competencia de grandes cadenas</li>
+          <li>Regulaciones sanitarias estrictas</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="requisitos" class="section">
+    <h2>Requisitos del Sistema</h2>
+    <h3>Funcionales</h3>
+    <ul>
+      <li>Autenticación segura de usuarios</li>
+      <li>Gestión de clientes y productos con base de datos</li>
+      <li>Registro de ventas con descuento automático de stock</li>
+      <li>Generación de reportes en PDF y Excel (inventario y ventas)</li>
+      <li>CRUD completo de inventario</li>
+      <li>Alertas de stock mínimo</li>
+    </ul>
+    <h3>No Funcionales</h3>
+    <ul>
+      <li>Interfaz adaptable a computador y celular</li>
+      <li>Persistencia en base de datos (MySQL en AWS RDS)</li>
+      <li>Contraseñas cifradas y formularios protegidos contra CSRF</li>
+      <li>Proyecto desarrollado en Python (Flask)</li>
+    </ul>
+  </section>
+{% endblock %}

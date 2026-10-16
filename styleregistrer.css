@@ -1,0 +1,85 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f4f8;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: #2b7a78;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+p {
+  color: #333;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 30px;
+}
+
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 20px;
+  background: #3aafa9;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #2b7a78;
+}
+
+
+.form-container{
+  max-width:450px;
+  margin:4rem auto;
+  background:white;
+  padding:2rem;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.15);
+}
+.form-container h2{
+  text-align:center;
+  color:#2b7a78;
+}
+.form-container label{
+  display:block;
+  margin-top:1rem;
+  margin-bottom:.4rem;
+  font-weight:700;
+}
+.form-container input{
+  width:100%;
+  box-sizing:border-box;
+  padding:.8rem;
+  border:1px solid #cbd5e0;
+  border-radius:8px;
+}
+.alt-link a{
+  color:#2b7a78;
+  font-weight:700;
+  text-decoration:none;
+}
+.error-text{
+  color:#b42318;
+  font-size:14px;
+  margin-top:6px;
+  text-align:left;
+}
+
+/* Mensajes flash (en esta página no se cargaba style.css) */
+.flash{
+  max-width:450px;
+  margin:1rem auto 0;
+  padding:1rem 1.2rem;
+  border-radius:10px;
+  font-weight:600;
+}
+.flash.success{ background:#c6f6d5; color:#22543d; }
+.flash.error{ background:#fed7d7; color:#742a2a; }
+.flash.info{ background:#bee3f8; color:#2a4365; }

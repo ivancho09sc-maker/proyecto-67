@@ -1,0 +1,17 @@
+# Copiar a /etc/systemd/system/elixir.service
+# Ajusta "ubuntu" y la ruta si tu usuario o carpeta son distintos.
+[Unit]
+Description=Elixir Urbano (Flask + gunicorn)
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/elixir_urbano
+EnvironmentFile=/home/ubuntu/elixir_urbano/.env
+# --preload carga la app una sola vez: evita que los workers creen las tablas al mismo tiempo
+ExecStart=/home/ubuntu/elixir_urbano/venv/bin/gunicorn --preload --workers 2 --bind 127.0.0.1:8000 wsgi:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

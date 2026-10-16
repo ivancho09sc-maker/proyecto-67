@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Ventas{% endblock %}
+{% block h1 %}Ventas{% endblock %}
+{% block subtitle %}Cada venta descuenta el stock del inventario{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>Historial de Ventas</h2>
+  <div class="report-actions">
+    <a class="btn" href="{{ url_for('nueva_venta') }}">+ Nueva venta</a>
+    <a class="btn btn-secondary" href="{{ url_for('reporte_ventas_excel') }}">⬇ Reporte Excel</a>
+    <a class="btn btn-secondary" href="{{ url_for('reporte_ventas_pdf') }}">⬇ Reporte PDF</a>
+  </div>
+  <p><strong>Total vendido (ventas activas):</strong> {{ total_activas|cop }}</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>N°</th><th>Fecha</th><th>Cliente</th><th>Registrada por</th><th>Total</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+      {% for v in ventas %}
+        <tr>
+          <td>{{ v.id }}</td>
+          <td>{{ v.fecha|fecha }}</td>
+          <td>{{ v.cliente.nombre if v.cliente else "Sin cliente" }}</td>
+          <td>{{ v.usuario.nombre if v.usuario else "-" }}</td>
+          <td>{{ v.total|cop }}</td>
+          <td>{% if v.estado == "activa" %}<span class="badge badge-ok">Activa</span>{% else %}<span class="badge badge-low">Anulada</span>{% endif %}</td>
+          <td><a class="btn btn-secondary" href="{{ url_for('detalle_venta', venta_id=v.id) }}">Ver detalle</a></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="7" class="small-muted">Aún no hay ventas registradas.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

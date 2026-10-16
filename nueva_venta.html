@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Nueva venta{% endblock %}
+{% block h1 %}Nueva Venta{% endblock %}
+{% block subtitle %}Selecciona los productos y las cantidades{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>Registrar venta</h2>
+  {% if not productos %}
+    <p class="small-muted">No hay productos con stock disponible. <a href="{{ url_for('productos') }}">Ir al inventario</a>.</p>
+  {% else %}
+  <form method="post" id="form-venta">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="form-group" style="max-width:420px;">
+      <label for="cliente_id">Cliente (opcional)</label>
+      <select id="cliente_id" name="cliente_id">
+        <option value="">Sin cliente</option>
+        {% for c in clientes %}<option value="{{ c.id }}">{{ c.nombre }} — {{ c.documento }}</option>{% endfor %}
+      </select>
+    </div>
+
+    <h3>Productos</h3>
+    <div id="lineas">
+      <div class="linea-venta">
+        <select name="producto_id" required>
+          <option value="">Selecciona un producto</option>
+          {% for p in productos %}
+            <option value="{{ p.id }}" data-precio="{{ p.precio }}" data-stock="{{ p.stock }}">{{ p.nombre }} — {{ p.precio|cop }} (stock {{ p.stock }})</option>
+          {% endfor %}
+        </select>
+        <input type="number" name="cantidad" min="1" step="1" value="1" required aria-label="Cantidad">
+        <span class="subtotal">$0</span>
+        <button type="button" class="btn btn-danger quitar-linea" title="Quitar línea">✕</button>
+      </div>
+    </div>
+    <p><button type="button" class="btn btn-secondary" id="agregar-linea">+ Agregar otro producto</button></p>
+
+    <p class="total-box">Total: <strong id="total-venta">$0</strong></p>
+    <p class="centrado">
+      <button class="btn" type="submit">Registrar venta</button>
+      <a class="btn btn-secondary" href="{{ url_for('ventas') }}">Cancelar</a>
+    </p>
+  </form>
+  {% endif %}
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='ventas.js') }}"></script>{% endblock %}

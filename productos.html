@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Inventario{% endblock %}
+{% block h1 %}Inventario de Productos{% endblock %}
+{% block subtitle %}Gestión y organización de medicamentos{% endblock %}
+
+{% block content %}
+{% if bajo_stock %}
+<div class="alerta-stock">
+  <strong>⚠ Alerta de stock bajo:</strong> {{ bajo_stock|length }} producto(s) están en o por debajo del stock mínimo.
+  <ul>
+    {% for p in bajo_stock %}
+      <li>{{ p.nombre }} — quedan {{ p.stock }} (mínimo {{ p.stock_minimo }})</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if usuario_actual %}
+<section class="card">
+  <h2>Crear Producto</h2>
+  <form method="post" action="{{ url_for('crear_producto') }}">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" required minlength="2" maxlength="120" data-no-blank>
+      </div>
+      <div class="form-group">
+        <label for="precio">Precio</label>
+        <input type="number" id="precio" step="0.01" min="0.01" max="99999999.99" name="precio" required>
+      </div>
+      <div class="form-group">
+        <label for="stock">Stock (unidades)</label>
+        <input type="number" id="stock" name="stock" min="0" step="1" value="0" required data-entero>
+      </div>
+      <div class="form-group">
+        <label for="stock_minimo">Stock mínimo (alerta)</label>
+        <input type="number" id="stock_minimo" name="stock_minimo" min="0" step="1" value="5" required data-entero>
+      </div>
+      <div class="form-group">
+        <label for="imagen">URL imagen</label>
+        <input type="url" id="imagen" name="imagen" maxlength="200" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <input type="text" id="descripcion" name="descripcion" maxlength="255" placeholder="Detalle del producto">
+      </div>
+    </div>
+    <p class="centrado"><button class="btn" type="submit">Guardar producto</button></p>
+  </form>
+</section>
+{% endif %}
+
+<section class="card">
+  <h2>Listado de Productos</h2>
+
+  {% if usuario_actual %}
+  <div class="report-actions">
+    <a class="btn btn-secondary" href="{{ url_for('reporte_excel') }}">⬇ Reporte Excel</a>
+    <a class="btn btn-secondary" href="{{ url_for('reporte_pdf') }}">⬇ Reporte PDF</a>
+  </div>
+  {% endif %}
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Descripción</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for producto in productos %}
+        <tr>
+          <td>{{ producto.id }}</td>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.precio|cop }}</td>
+          <td>{{ producto.stock }} <span class="small-muted">(mín. {{ producto.stock_minimo }})</span></td>
+          <td>
+            {% if producto.bajo_stock %}<span class="badge badge-low">Stock bajo</span>{% else %}<span class="badge badge-ok">OK</span>{% endif %}
+          </td>
+          <td>{{ producto.descripcion or "Sin descripción" }}</td>
+          <td>
+            {% if usuario_actual %}
+              <a class="btn btn-warning" href="{{ url_for('editar_producto', producto_id=producto.id) }}">Editar</a>
+              <form class="inline-form" method="post" action="{{ url_for('eliminar_producto', producto_id=producto.id) }}" data-confirm="¿Seguro que deseas eliminar este producto?">
+                <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+                <button class="btn btn-danger" type="submit">Eliminar</button>
+              </form>
+            {% else %}
+              <span class="small-muted">Solo lectura</span>
+            {% endif %}
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="7" class="small-muted">Aún no hay productos.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Vista en tarjetas</h2>
+  <div class="grid">
+    {% for producto in productos %}
+    <div class="card-green">
+      <img src="{{ producto.imagen or 'https://placehold.co/300x180?text=Producto' }}" alt="{{ producto.nombre }}" loading="lazy">
+      <h3>{{ producto.nombre }}</h3>
+      <p>{{ producto.precio|cop }}</p>
+      <p>{{ producto.descripcion or "Producto de inventario" }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

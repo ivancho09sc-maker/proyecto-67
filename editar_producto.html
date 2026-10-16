@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Editar producto{% endblock %}
+{% block h1 %}Editar Producto{% endblock %}
+{% block subtitle %}Actualiza la información del inventario{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>Editar producto</h2>
+  <form method="post">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" value="{{ producto.nombre }}" required minlength="2" maxlength="120" data-no-blank>
+      </div>
+      <div class="form-group">
+        <label for="precio">Precio</label>
+        <input type="number" id="precio" step="0.01" min="0.01" max="99999999.99" name="precio" value="{{ producto.precio }}" required>
+      </div>
+      <div class="form-group">
+        <label for="stock">Stock (unidades)</label>
+        <input type="number" id="stock" name="stock" min="0" step="1" value="{{ producto.stock }}" required data-entero>
+      </div>
+      <div class="form-group">
+        <label for="stock_minimo">Stock mínimo (alerta)</label>
+        <input type="number" id="stock_minimo" name="stock_minimo" min="0" step="1" value="{{ producto.stock_minimo }}" required data-entero>
+      </div>
+      <div class="form-group">
+        <label for="imagen">URL imagen</label>
+        <input type="url" id="imagen" name="imagen" maxlength="200" value="{{ producto.imagen or '' }}">
+      </div>
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <input type="text" id="descripcion" name="descripcion" maxlength="255" value="{{ producto.descripcion or '' }}">
+      </div>
+    </div>
+    <p class="centrado">
+      <button class="btn" type="submit">Actualizar</button>
+      <a class="btn btn-secondary" href="{{ url_for('productos') }}">Cancelar</a>
+    </p>
+  </form>
+</section>
+{% endblock %}
